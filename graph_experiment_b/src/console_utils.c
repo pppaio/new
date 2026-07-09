@@ -2,6 +2,20 @@
 #include <string.h>
 #include "../include/console_utils.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#include <stdlib.h>
+#endif
+
+void consoleInitEncoding(void)
+{
+#if defined(_WIN32) && defined(CONSOLE_FORCE_UTF8)
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
+    system("chcp 65001 >nul 2>nul");
+#endif
+}
+
 void consoleClearInputBuffer(void)
 {
     int ch;

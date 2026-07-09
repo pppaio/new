@@ -160,9 +160,12 @@ static void loadScenicDemoData(IGraph *graph)
 
 int main(void)
 {
-    IGraph *scenicGraph = createAdjacencyMatrixGraph();
+    IGraph *scenicGraph;
     int userChoice;
     int graphInitialized = 0;
+
+    consoleInitEncoding();
+    scenicGraph = createAdjacencyMatrixGraph();
 
     if (scenicGraph == NULL) {
         printf("系统初始化失败: 无法创建景区图实例\n");

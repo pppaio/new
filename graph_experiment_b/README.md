@@ -144,18 +144,34 @@ type 取值如下：
   test: 新增查询接口8号菜单项(getVertexById/hasEdge)
 
 ================================================================
-构建命令
+构建命令（中文乱码必看！Windows下源码UTF-8，控制台默认GBK）
 ================================================================
 
-【gcc】
+【gcc —— 强烈推荐：方案A（转GBK字符串，最稳，双击exe也正常）】
   cd graph_experiment_b
-  gcc -I./include -Wall -Wextra -std=c11 \
-      -o build/scenic_graph_matrix \
+  gcc -I./include -Wall -Wextra -std=c11 ^
+      -finput-charset=UTF-8 -fexec-charset=GBK ^
+      -o build/scenic_graph_matrix ^
       src/graph_matrix.c src/console_utils.c src/main.c
-  ./build/scenic_graph_matrix.exe
+  .\build\scenic_graph_matrix.exe
+
+  说明: -finput-charset=UTF-8   → 告诉GCC源文件是UTF-8编码
+        -fexec-charset=GBK      → 编译时把字符串字面量转换为GBK
+        这样即使是双击打开exe(Windows默认cmd代码页936=GBK)也不中文
+
+【gcc —— 方案B（运行时切控制台UTF-8代码页65001）】
+  cd graph_experiment_b
+  gcc -I./include -Wall -Wextra -std=c11 ^
+      -o build/scenic_graph_matrix ^
+      src/graph_matrix.c src/console_utils.c src/main.c
+  说明: 程序启动时 consoleInitEncoding() 会自动执行:
+        SetConsoleOutputCP(65001) + chcp 65001
+        适用于Windows Terminal/VSCode等支持UTF-8的终端
 
 【CMake】
   cd graph_experiment_b
   cmake -S . -B build
+        (若要GBK编译，在CMakeLists.txt里加 add_compile_definitions / 或
+         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fexec-charset=GBK")
   cmake --build build --config Release
-  ./build/scenic_graph_matrix.exe
+  .\build\scenic_graph_matrix.exe

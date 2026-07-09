@@ -3,6 +3,7 @@
 
 #include "graph_interface.h"
 
+void consoleInitEncoding(void);
 void consoleClearInputBuffer(void);
 int consoleReadInt(int defaultValue);
 void consoleReadLine(char *buffer, size_t bufferSize);
